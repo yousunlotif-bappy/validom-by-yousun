@@ -1,26 +1,84 @@
+/* 
+  Tailwind CSS import
+  This line connects Tailwind utility classes with the whole project.
+  Keep this at the top of the file.
+*/
 @import "tailwindcss";
 
+/* 
+  Global color variables for Validom by Yousun
+
+  Theme idea:
+  - Background: premium dark navy / black
+  - Text: clean white
+  - Primary: cyan + blue
+  - Accent: soft gold
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #05070c;
+  --foreground: #f8fafc;
+
+  --primary: #06b6d4;
+  --primary-blue: #2563eb;
+  --accent-gold: #facc15;
+
+  --card-bg: #0b1120;
+  --card-border: rgba(148, 163, 184, 0.18);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 
+  Main body style
+  This controls the full website background and default text color.
+*/
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* 
+  Smooth scrolling gives the dashboard a more polished SaaS feel.
+*/
+html {
+  scroll-behavior: smooth;
+}
+
+/* 
+  Better default box sizing.
+  This helps layouts behave more predictably.
+*/
+* {
+  box-sizing: border-box;
+}
+
+/* 
+  Selection color
+  When users select text, it will match our cyan/blue brand style.
+*/
+::selection {
+  background: rgba(6, 182, 212, 0.35);
+  color: #ffffff;
+}
+
+/* 
+  Simple custom scrollbar
+  Makes the dashboard feel more premium on desktop browsers.
+*/
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #05070c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
