@@ -1,8 +1,12 @@
 /*
-  JudgeMode is a contest-focused explanation block.
+  JudgeMode explains the project in judge language.
 
-  This makes the Domain Roulette alignment obvious for judges:
-  Validom starts with the domain first, then builds the startup strategy.
+  This makes your contest alignment obvious:
+  - problem
+  - solution
+  - why it matters
+  - challenge fit
+  - demo path
 */
 export default function JudgeMode() {
   return (
@@ -12,29 +16,45 @@ export default function JudgeMode() {
       </p>
 
       <h3 className="mt-3 text-xl font-bold text-white">
-        Why this matches Domain Roulette
+        Why this project deserves attention
       </h3>
 
-      <p className="mt-3 text-sm leading-6 text-slate-300">
-        Validom starts with the domain first, then turns it into a startup
-        concept, validation report, trust analysis, AI strategy, and launch kit.
-        The selected domain is not just branding — it defines the product
-        strategy.
-      </p>
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <JudgeCard
+          title="Problem"
+          text="Founders and hackathon teams waste time building ideas without validating domain fit, market demand, trust, and launch readiness."
+        />
 
-      <div className="mt-4 grid gap-3 text-sm md:grid-cols-3">
-        <div className="rounded-xl border border-white/10 bg-black/20 p-3 text-slate-300">
-          Creative interpretation
-        </div>
+        <JudgeCard
+          title="Solution"
+          text="Validom validates a domain-first startup concept using AI strategy, trust scoring, live domain signals, competitor context, and proof verification."
+        />
 
-        <div className="rounded-xl border border-white/10 bg-black/20 p-3 text-slate-300">
-          Technical execution
-        </div>
+        <JudgeCard
+          title="Why it matters"
+          text="It helps builders decide whether to build, pivot, or avoid before investing time into a weak idea."
+        />
 
-        <div className="rounded-xl border border-white/10 bg-black/20 p-3 text-slate-300">
-          Product polish
-        </div>
+        <JudgeCard
+          title="Challenge fit"
+          text="Validom is built for Domain Roulette because it starts with the domain first and turns that domain into the product strategy."
+        />
       </div>
+
+      <div className="mt-4 rounded-xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-slate-300">
+        <span className="font-semibold text-white">Demo path:</span> Enter a
+        domain → run validation → review score → open full report → generate
+        launch kit.
+      </div>
+    </div>
+  );
+}
+
+function JudgeCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+      <p className="font-semibold text-purple-200">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-300">{text}</p>
     </div>
   );
 }

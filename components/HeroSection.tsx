@@ -8,11 +8,7 @@ import { ValidationReport } from "@/types/validation";
 /*
   HeroSection is the main input area.
 
-  Phase 4 upgrades:
-  - premium AI badge
-  - better examples
-  - better error message
-  - premium loading animation
+  It lets users enter a domain and start the validation pipeline.
 */
 type HeroSectionProps = {
   onReportGenerated: (report: ValidationReport) => void;
@@ -23,9 +19,14 @@ export default function HeroSection({ onReportGenerated }: HeroSectionProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  /*
+    Judge-friendly example domains.
+
+    These help judges test the app quickly without thinking too much.
+  */
   const examples = [
     "validom.com",
-    "airesume.co",
+    "startup.delivery",
     "studybuddy.io",
     "greenlease.com",
     "trustlaunch.ai",
@@ -73,13 +74,13 @@ export default function HeroSection({ onReportGenerated }: HeroSectionProps) {
 
   return (
     <section className="relative overflow-hidden rounded-3xl border border-yellow-500/25 bg-gradient-to-br from-[#0b1b38] via-[#071827] to-[#062c25] p-6 shadow-2xl shadow-cyan-500/5 sm:p-8 lg:p-10">
-      {/* Soft premium glow effects */}
+      {/* Premium glow effects */}
       <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
 
       <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
         <div>
-          {/* Contest + AI badge */}
+          {/* AI / contest badge */}
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-semibold text-cyan-200">
             <Sparkles size={14} />
             AI-powered domain-first startup validation
@@ -101,7 +102,7 @@ export default function HeroSection({ onReportGenerated }: HeroSectionProps) {
             → Verdict → Launch
           </p>
 
-          {/* Domain input and CTA */}
+          {/* Input and CTA */}
           <div className="mt-8 flex max-w-3xl flex-col gap-3 sm:flex-row">
             <div className="flex h-14 flex-1 items-center gap-3 rounded-2xl border border-white/15 bg-black/25 px-4 transition-all duration-200 focus-within:border-cyan-400/50 focus-within:bg-black/35 focus-within:shadow-lg focus-within:shadow-cyan-500/10">
               <Globe2 size={20} className="shrink-0 text-slate-300" />
@@ -131,14 +132,14 @@ export default function HeroSection({ onReportGenerated }: HeroSectionProps) {
             </button>
           </div>
 
-          {/* Better error message */}
+          {/* Error message */}
           {error && (
             <p className="mt-3 rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-2 text-sm text-red-300">
               {error}
             </p>
           )}
 
-          {/* Premium loading animation */}
+          {/* Premium loading state */}
           {loading && (
             <div className="mt-5 rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-4">
               <p className="mb-3 text-sm font-semibold text-cyan-200">
@@ -149,13 +150,14 @@ export default function HeroSection({ onReportGenerated }: HeroSectionProps) {
                 <LoadingStep text="Checking domain structure" />
                 <LoadingStep text="Evaluating trust signals" />
                 <LoadingStep text="Analyzing brand strength" />
+                <LoadingStep text="Scanning competitor context" />
                 <LoadingStep text="Generating AI startup insights" />
                 <LoadingStep text="Preparing launch-ready verdict" />
               </div>
             </div>
           )}
 
-          {/* Demo domains for judges */}
+          {/* Example domains */}
           <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-slate-400">
             <span>Try examples:</span>
 
@@ -189,7 +191,7 @@ export default function HeroSection({ onReportGenerated }: HeroSectionProps) {
 }
 
 /*
-  Small loading row used during analysis.
+  One loading step row.
 */
 function LoadingStep({ text }: { text: string }) {
   return (

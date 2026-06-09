@@ -9,6 +9,9 @@ import ReportSection from "./ReportSection";
 import DownloadReportButton from "./DownloadReportButton";
 import LiveSignalsPanel from "./LiveSignalsPanel";
 import CompetitorPanel from "./CompetitorPanel";
+import EvidenceTable from "./EvidenceTable";
+import AgentWorkflow from "./AgentWorkflow";
+import ScoringExplainer from "./ScoringExplainer";
 
 import { getSavedReport } from "@/lib/report-storage";
 import { ValidationReport } from "@/types/validation";
@@ -22,20 +25,20 @@ import {
 } from "lucide-react";
 
 /*
-  ReportPage shows the complete Validom validation report.
+  ReportPage shows the complete Validom report.
 
-  It loads the latest report from localStorage.
-
-  This page includes:
+  It loads the latest report from localStorage and presents:
   - domain overview
   - score breakdown
-  - live technical signals
+  - scoring transparency
+  - evidence table
+  - live signals
   - competitor intelligence
   - AI strategic analysis
   - startup concepts
   - Domain Roulette alignment
+  - agent workflow
   - recommendations
-  - print/export and PDF download
 */
 export default function ReportPage() {
   const [report, setReport] = useState<ValidationReport | null>(null);
@@ -83,7 +86,7 @@ export default function ReportPage() {
       <section className="min-h-screen p-4 sm:p-5 lg:ml-[280px]">
         <Topbar />
 
-        {/* Report hero header */}
+        {/* Report Header */}
         <div className="mb-6 rounded-3xl border border-yellow-500/25 bg-gradient-to-br from-[#0b1b38] via-[#071827] to-[#062c25] p-8 shadow-2xl shadow-cyan-500/5">
           <p className="text-xs font-bold uppercase tracking-widest text-yellow-300">
             Full Validom Report
@@ -96,7 +99,8 @@ export default function ReportPage() {
           <p className="mt-3 max-w-3xl text-slate-300">
             Complete AI-powered domain-first startup validation report including
             trust, brand strength, market signals, proof quality, live technical
-            signals, competitor intelligence, domain fit, and launch readiness.
+            signals, competitor intelligence, evidence verification, domain fit,
+            and launch readiness.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -113,7 +117,6 @@ export default function ReportPage() {
             </span>
           </div>
 
-          {/* Export actions */}
           <div className="mt-5 flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
@@ -129,7 +132,7 @@ export default function ReportPage() {
 
         <div className="grid gap-5 xl:grid-cols-[1fr_340px]">
           <div className="space-y-5">
-            {/* 1. Domain overview */}
+            {/* 1. Domain Overview */}
             <ReportSection
               title="1. Domain Overview"
               subtitle="Basic domain structure and brand foundation."
@@ -179,7 +182,7 @@ export default function ReportPage() {
               )}
             </ReportSection>
 
-            {/* 2. Score breakdown */}
+            {/* 2. Score Breakdown */}
             <ReportSection
               title="2. Score Breakdown"
               subtitle="Combined result from Validom's scoring engine and live signal adjustments."
@@ -194,30 +197,46 @@ export default function ReportPage() {
               </div>
             </ReportSection>
 
-            {/* 3. Live technical signals */}
+            {/* 3. Scoring Transparency */}
+            <ReportSection
+              title="3. Scoring Transparency"
+              subtitle="How Validom explains its opportunity and trust scores."
+            >
+              <ScoringExplainer />
+            </ReportSection>
+
+            {/* 4. Evidence / Claim Verification */}
+            <ReportSection
+              title="4. Evidence / Claim Verification"
+              subtitle="Every major claim is connected to a visible signal or analysis source."
+            >
+              <EvidenceTable report={report} />
+            </ReportSection>
+
+            {/* 5. Live Technical Signals */}
             {report.liveSignals && (
               <ReportSection
-                title="3. Live Technical Signals"
+                title="5. Live Technical Signals"
                 subtitle="DNS, SSL, website reachability, security headers, and social profile signals."
               >
                 <LiveSignalsPanel signals={report.liveSignals} />
               </ReportSection>
             )}
 
-            {/* 4. Competitor intelligence */}
+            {/* 6. Competitor Intelligence */}
             {report.competitorInsight && (
               <ReportSection
-                title="4. Competitor Intelligence"
-                subtitle="Live or fallback competitor context for the domain idea."
+                title="6. Competitor Intelligence"
+                subtitle="Live or baseline competitor context for the domain idea."
               >
                 <CompetitorPanel competitorInsight={report.competitorInsight} />
               </ReportSection>
             )}
 
-            {/* 5. AI strategic analysis */}
+            {/* 7. AI Strategic Analysis */}
             {report.aiInsights && (
               <ReportSection
-                title="5. AI Strategic Analysis"
+                title="7. AI Strategic Analysis"
                 subtitle="Generated by Validom's AI insight engine."
               >
                 <div className="grid gap-4 md:grid-cols-2">
@@ -254,9 +273,9 @@ export default function ReportPage() {
               </ReportSection>
             )}
 
-            {/* 6. Startup concepts */}
+            {/* 8. Startup Concepts */}
             <ReportSection
-              title="6. Startup Concepts"
+              title="8. Startup Concepts"
               subtitle="Product directions generated from the domain."
             >
               <div className="grid gap-4 md:grid-cols-3">
@@ -285,9 +304,9 @@ export default function ReportPage() {
               </div>
             </ReportSection>
 
-            {/* 7. Contest alignment */}
+            {/* 9. Domain Roulette Alignment */}
             <ReportSection
-              title="7. Domain Roulette Alignment"
+              title="9. Domain Roulette Alignment"
               subtitle="This section directly explains why Validom fits the contest challenge."
             >
               <div className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-5">
@@ -297,9 +316,17 @@ export default function ReportPage() {
               </div>
             </ReportSection>
 
-            {/* 8. Recommendations */}
+            {/* Agent Workflow */}
             <ReportSection
-              title="8. Recommendations"
+              title="10. Agent Workflow"
+              subtitle="The modular validation pipeline behind Validom."
+            >
+              <AgentWorkflow />
+            </ReportSection>
+
+            {/* 11. Recommendations */}
+            <ReportSection
+              title="11. Recommendations"
               subtitle="Next steps to make this domain launch-ready."
             >
               <div className="space-y-3">
@@ -361,16 +388,17 @@ export default function ReportPage() {
                     label="DNS Active"
                     value={report.liveSignals.dns.hasARecords ? "Yes" : "No"}
                   />
+
                   <Signal
                     label="SSL Valid"
                     value={report.liveSignals.ssl.valid ? "Yes" : "No"}
                   />
+
                   <Signal
                     label="Website Reachable"
-                    value={
-                      report.liveSignals.http.reachable ? "Yes" : "No"
-                    }
+                    value={report.liveSignals.http.reachable ? "Yes" : "No"}
                   />
+
                   <Signal
                     label="Security Headers"
                     value={
@@ -458,7 +486,7 @@ function AIInsightCard({
 }
 
 /*
-  Simple label/value row for sidebar summary panels.
+  Simple label/value row for summary panels.
 */
 function Signal({ label, value }: { label: string; value: string }) {
   return (
@@ -468,6 +496,5 @@ function Signal({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-
 
 

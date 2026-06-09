@@ -15,6 +15,9 @@ import RecentValidations from "./RecentValidations";
 import JudgeMode from "./JudgeMode";
 import LiveSignalsPanel from "./LiveSignalsPanel";
 import CompetitorPanel from "./CompetitorPanel";
+import EvidenceTable from "./EvidenceTable";
+import AgentWorkflow from "./AgentWorkflow";
+import ScoringExplainer from "./ScoringExplainer";
 
 import {
   BadgeCheck,
@@ -30,34 +33,38 @@ import { addValidationHistory } from "@/lib/validation-history";
 import { ValidationReport } from "@/types/validation";
 
 /*
-  Dashboard is the main screen of Validom.
+  Dashboard is the main control center of Validom.
 
-  It handles:
-  - domain validation input
+  This page shows:
+  - domain input and validation flow
   - dynamic score cards
-  - latest report state
-  - saving report to localStorage
-  - adding recent validation history
-  - showing live DNS/SSL/HTTP signals
-  - showing competitor intelligence
-  - showing Judge Mode for contest alignment
+  - scoring explanation
+  - current domain analysis
+  - live technical signals
+  - competitor intelligence
+  - evidence / claim verification
+  - judge mode
+  - agent workflow
+  - startup concepts
+  - launch kit
+  - recent validation history
 */
 export default function Dashboard() {
   const [report, setReport] = useState<ValidationReport>(defaultReport);
 
   /*
-    Save the default/latest report when the dashboard loads.
+    Save the current report into browser storage.
 
-    This helps the Report Page and Launch Kit Page work even if the user
-    directly opens /report or /launch-kit after visiting the dashboard.
+    This allows:
+    - /report page to load the latest report
+    - /launch-kit page to generate launch content from the latest report
   */
   useEffect(() => {
     saveReport(report);
   }, [report]);
 
   /*
-    This function runs when HeroSection receives a new report
-    from the /api/analyze-domain route.
+    Runs after HeroSection receives a new report from the API.
   */
   function handleReportGenerated(newReport: ValidationReport) {
     setReport(newReport);
@@ -98,7 +105,7 @@ export default function Dashboard() {
         </span>
       </div>
 
-      {/* Main content area */}
+      {/* Main content */}
       <section className="min-h-screen p-4 sm:p-5 lg:ml-[280px]">
         <Topbar />
 
@@ -108,7 +115,7 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_300px]">
           <div className="min-w-0">
-            {/* Dynamic score cards */}
+            {/* 1. Score Cards */}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-5">
               <ScoreCard
                 title="Trust Score"
@@ -131,12 +138,12 @@ export default function Dashboard() {
                 value={
                   report.competitorInsight
                     ? `${report.competitorInsight.count}`
-                    : "8"
+                    : "3"
                 }
                 subtitle={
                   report.competitorInsight?.source === "serpapi"
                     ? "Live competitor signals detected."
-                    : "Fallback competitor context."
+                    : "Baseline competitor context."
                 }
                 footer={report.competitionLevel}
                 icon={Users}
@@ -159,7 +166,12 @@ export default function Dashboard() {
               />
             </div>
 
-            {/* Current domain analysis */}
+            {/* 2. How Scoring Works */}
+            <div className="mt-5">
+              <ScoringExplainer />
+            </div>
+
+            {/* 3. Current Domain Analysis */}
             <div className="mt-5 rounded-2xl border border-cyan-400/20 bg-cyan-400/5 p-5">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <h3 className="font-semibold text-cyan-200">
@@ -226,34 +238,44 @@ export default function Dashboard() {
               )}
             </div>
 
-            {/* Real live technical signals */}
+            {/* 4. Live Signals */}
             <div className="mt-5">
               <LiveSignalsPanel signals={report.liveSignals} />
             </div>
 
-            {/* Competitor intelligence */}
+            {/* 5. Competitor Intelligence */}
             <div className="mt-5">
               <CompetitorPanel competitorInsight={report.competitorInsight} />
             </div>
 
-            {/* Contest explanation section */}
+            {/* 6. Evidence / Claim Verification */}
+            <div className="mt-5">
+              <EvidenceTable report={report} />
+            </div>
+
+            {/* 7. Judge Mode */}
             <div className="mt-5">
               <JudgeMode />
             </div>
 
-            {/* Concepts and launch kit */}
+            {/* 8. Agent Workflow */}
+            <div className="mt-5">
+              <AgentWorkflow />
+            </div>
+
+            {/* 9. Startup Concepts + Launch Kit */}
             <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-2">
               <StartupConcepts concepts={report.concepts} />
               <LaunchKit />
             </div>
 
-            {/* Dynamic recent validation history */}
+            {/* 10. Recent Validations */}
             <div className="mt-5">
               <RecentValidations />
             </div>
           </div>
 
-          {/* Right-side verdict panel */}
+          {/* Right verdict panel */}
           <div className="min-w-0">
             <VerdictPanel
               verdict={report.verdict}
